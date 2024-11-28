@@ -106,6 +106,21 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
    *    node_t *c = l.head;
    *    Insert newblk After Current Node if:   newblk->start > c->start
    */
+  node_t *newNode = node_alloc(blk);
+  node_t *current = l->head;
+  node_t *previous;
+
+  if (current==NULL){
+    l->head = newNode;
+  }
+  else{
+    while(current!=NULL){
+      // TODO: implement
+      previous =  current;
+      current = current->next;
+    }
+  }
+
 }
 
 int blk_get_size(block_t *thisblk){
@@ -127,6 +142,8 @@ void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
    * 
    *    USE the compareSize()
    */
+
+   // TODO: implement
 }
 
 void list_add_descending_by_blocksize(list_t *l, block_t *blk){
