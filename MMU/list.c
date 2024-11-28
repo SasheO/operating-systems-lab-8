@@ -106,7 +106,7 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
    *    node_t *c = l.head;
    *    Insert newblk After Current Node if:   newblk->start > c->start
    */
-  node_t *newNode = node_alloc(blk);
+  node_t *newNode = node_alloc(newblk);
   node_t *current = l->head;
   node_t *previous;
 
@@ -114,11 +114,12 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
     l->head = newNode;
   }
   else{
-    while(current!=NULL){
-      // TODO: implement
+    while((current!=NULL) && (current->blk->start < newblk->start)){
       previous =  current;
       current = current->next;
     }
+    previous->next = newNode;
+    newNode->next = current;
   }
 
 }
