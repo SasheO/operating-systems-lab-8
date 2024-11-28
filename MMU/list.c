@@ -145,6 +145,22 @@ void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
    */
 
    // TODO: implement
+   node_t *newNode = node_alloc(newblk);
+  node_t *current = l->head;
+  node_t *previous;
+
+  if (current==NULL){
+    l->head = newNode;
+  }
+  else{
+    int newblk_size = blk_get_size(newblk);
+    while((current!=NULL) && (blk_get_size(current->blk) < newblk_size)){
+      previous =  current;
+      current = current->next;
+    }
+    previous->next = newNode;
+    newNode->next = current;
+  }
 }
 
 void list_add_descending_by_blocksize(list_t *l, block_t *blk){
