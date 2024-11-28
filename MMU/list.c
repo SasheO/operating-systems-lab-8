@@ -42,6 +42,7 @@ void list_print(list_t *l) {
     b = current->blk;
     printf("PID=%d START:%d END:%d\n", b->pid, b->start, b->end);
     current = current->next;
+    printf("!\n");
   }
 }
 
@@ -112,11 +113,25 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
 
   if (current==NULL){
     l->head = newNode;
+
   }
   else{
-    while((current!=NULL) && (current->blk->start < newblk->start)){
-      previous =  current;
-      current = current->next;
+    int i = 0;
+    while(current!=NULL){
+      
+      if (current->blk->start < newblk->start){
+
+        i++;
+        previous =  current;
+        current = current->next;
+      }
+      else{
+
+        previous =  current;
+        current = current->next;
+        
+        break;
+      }
     }
     previous->next = newNode;
     newNode->next = current;
@@ -162,6 +177,7 @@ void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
     newNode->next = current;
   }
 }
+
 
 void list_add_descending_by_blocksize(list_t *l, block_t *blk){
   node_t *current;

@@ -77,17 +77,20 @@ void allocate_memory(list_t * freelist, list_t * alloclist, int pid, int blocksi
       block_to_assign->pid = pid; // allocate the right PID to memory to assign
 
       if(policy == 1){
-          // 1 -> FIFO
-          list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
-          list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the free list
+        // 1 -> FIFO
+        list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
+        list_print(alloclist);
+        list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the free list
       }
       else if (policy == 2){
-          // 2 -> BESTFIT
-          list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
-          list_add_ascending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
+        // 2 -> BESTFIT
+        list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
+        list_add_ascending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
       }
       else if (policy == 3){
-          //  3 -> WORSTFIT
+        //  3 -> WORSTFIT
+        list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
+        list_add_descending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
       }
     }
     
@@ -108,8 +111,18 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
     * 3. set the blk.pid back to 0
     * 4. add the blk back to the FREE_LIST based on policy.
     */
+    int indx_to_remove;
+    block_t* block_to_deallocate;
     if(policy == 1){
         // 1 -> FIFO
+        indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
+        while(indx_to_remove!=-1){
+          block_to_deallocate = list_remove_at_index(alloclist, indx_to_remove); // get block allocated to pid memory
+          
+          // block_to_deallocate->pid = NULL;
+          list_add_to_back(freelist, block_to_deallocate); // put free memory from deallocated block
+          indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
+        }
     }
     else if (policy == 2){
         // 2 -> BESTFIT 
