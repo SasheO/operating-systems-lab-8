@@ -159,7 +159,7 @@ void list_add_ascending_by_blocksize(list_t *l, block_t *blk){
    *    USE the compareSize()
    */
 
-   node_t *current;
+  node_t *current;
   node_t *prev;
   node_t *newNode = node_alloc(blk);
   int newblk_size = blk->end - blk->start;

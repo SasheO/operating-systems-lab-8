@@ -126,7 +126,6 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
       else if (policy == 2){
           // 2 -> BESTFIT
           list_add_ascending_by_blocksize(freelist, block_to_deallocate); // put free memory from deallocated block on the free list in ascending order
-          
         }
         else if (policy == 3){
           //  3 -> WORSTFIT
