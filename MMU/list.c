@@ -34,6 +34,7 @@ void node_free(node_t *node){
 void list_print(list_t *l) {
   node_t *current = l->head;
   block_t *b;
+
   
   if (current == NULL){
     printf("list is empty\n");
@@ -42,7 +43,6 @@ void list_print(list_t *l) {
     b = current->blk;
     printf("PID=%d START:%d END:%d\n", b->pid, b->start, b->end);
     current = current->next;
-    printf("!\n");
   }
 }
 

@@ -75,22 +75,20 @@ void allocate_memory(list_t * freelist, list_t * alloclist, int pid, int blocksi
       block_to_assign = list_remove_at_index(freelist, indx); // get first large enough block
       internal_fragment_block = trimBlk(block_to_assign, blocksize); // trim the block to only what is needed and create internal_fragment_block of the extra space
       block_to_assign->pid = pid; // allocate the right PID to memory to assign
-
-      if(policy == 1){
-        // 1 -> FIFO
-        list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
-        list_print(alloclist);
-        list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the free list
-      }
-      else if (policy == 2){
-        // 2 -> BESTFIT
-        list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
-        list_add_ascending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
-      }
-      else if (policy == 3){
-        //  3 -> WORSTFIT
-        list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
-        list_add_descending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
+      list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
+      if (internal_fragment_block!=NULL){
+        if(policy == 1){
+          // 1 -> FIFO
+          list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the free list        
+        }
+        else if (policy == 2){
+          // 2 -> BESTFIT
+            list_add_ascending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
+        }
+        else if (policy == 3){
+          //  3 -> WORSTFIT
+          list_add_descending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
+        }
       }
     }
     
