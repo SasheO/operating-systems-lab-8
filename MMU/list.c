@@ -40,7 +40,7 @@ void list_print(list_t *l) {
   }
   while (current != NULL){
     b = current->blk;
-    printf("PID=%d START:%d END:%d", b->pid, b->start, b->end);
+    printf("PID=%d START:%d END:%d\n", b->pid, b->start, b->end);
     current = current->next;
   }
 }
@@ -277,6 +277,10 @@ block_t* list_remove_at_index(list_t *l, int index) {
     }
   }
   return value; 
+}
+
+block_t * trimBlk(block_t *given_block, int size_needed){
+  
 }
 
 bool compareBlks(block_t* a, block_t *b) {

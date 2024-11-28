@@ -63,7 +63,26 @@ void allocate_memory(list_t * freelist, list_t * alloclist, int pid, int blocksi
     *     d. set the fragment->end = original blk.end before you changed it in #4
     *     e. add the fragment to the FREE_LIST based on policy
     */
-    
+    int indx;
+    block_t* block_to_assign;
+    if(policy == 1){
+        // 1 -> FIFO
+        indx = list_get_index_of_by_Size(freelist, blocksize);
+        if (indx==-1){
+            perror("Error: Not Enough Memory\n");
+            // not enough space
+        }
+        else{
+            block_to_assign = list_remove_at_index(list_t *l, int index)
+        }
+        
+    }
+    else if (policy == 2){
+        // 2 -> BESTFIT 
+    }
+    else if (policy == 3){
+        //  3 -> WORSTFIT
+    }
 }
 
 void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int policy) { 
@@ -81,6 +100,15 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
     * 3. set the blk.pid back to 0
     * 4. add the blk back to the FREE_LIST based on policy.
     */
+    if(policy == 1){
+        // 1 -> FIFO
+    }
+    else if (policy == 2){
+        // 2 -> BESTFIT 
+    }
+    else if (policy == 3){
+        //  3 -> WORSTFIT
+    }
 }
 
 list_t* coalese_memory(list_t * list){
