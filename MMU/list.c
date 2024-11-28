@@ -109,7 +109,7 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
 }
 
 int blk_get_size(block_t *thisblk){
-  return thisblk->end - thisblk->start;
+  return thisblk->end - thisblk->start + 1;
 }
 
 void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
@@ -280,6 +280,18 @@ block_t* list_remove_at_index(list_t *l, int index) {
 }
 
 block_t * trimBlk(block_t *given_block, int size_needed){
+  int blocksize = blk_get_size(given_block);
+  block_t * internal_fragment = malloc(sizeof(block_t));
+  
+  if (blocksize<=size_needed){
+    return NULL;
+  }
+  else{
+    internal_fragment->end = given_block->end;
+    given_block->end = given_block->start + size_needed -1;
+    internal_fragment->start = given_block->end+1;
+    return internal_fragment;
+  }
   
 }
 

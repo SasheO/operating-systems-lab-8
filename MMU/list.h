@@ -66,7 +66,7 @@ bool list_is_in_by_pid(list_t *l, int pid);
 /* Returns the element at location index. */
 block_t* list_get_elem_at(list_t *l, int index);
 
-/* Returns Exact block size and internal fragment */
+/* Modifies the given block to only the size needed and returns any internal fragments or NULL if given_block is the exact right size */
 block_t * trimBlk(block_t *given_block, int size_needed);
 
 /* Returns the index at which the given block of Size appears. */

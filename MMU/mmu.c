@@ -65,15 +65,19 @@ void allocate_memory(list_t * freelist, list_t * alloclist, int pid, int blocksi
     */
     int indx;
     block_t* block_to_assign;
+    block_t* internal_fragment_block;
     if(policy == 1){
         // 1 -> FIFO
         indx = list_get_index_of_by_Size(freelist, blocksize);
-        if (indx==-1){
-            perror("Error: Not Enough Memory\n");
-            // not enough space
+        if (indx==-1){ // not enough space
+            printf("Error: Memory allocation %d blocks\n", blocksize);
         }
-        else{
-            block_to_assign = list_remove_at_index(list_t *l, int index)
+        else{ 
+            block_to_assign = list_remove_at_index(freelist, indx); // get first large enough block
+            internal_fragment_block = trimBlk(block_to_assign, blocksize); // trim the block to only what is needed and create internal_fragment_block of the extra space
+            block_to_assign->pid = pid; // allocate the right PID to memory to assign
+            list_add_to_back(alloclist, block_to_assign); // assign block to memory
+            list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the free list
         }
         
     }
