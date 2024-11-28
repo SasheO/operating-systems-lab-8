@@ -108,6 +108,10 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
    */
 }
 
+int blk_get_size(block_t *thisblk){
+  return thisblk->end - thisblk->start;
+}
+
 void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
    /*
    * 1. Insert newblk into list l in ascending order based on the blocksize.
@@ -373,6 +377,8 @@ bool list_is_in_by_pid(list_t *l, int pid){
    * USE the comparePID()
    * 
    * Look at list_is_in_by_size()
+   */
+   return true;
 }
 
 /* Returns the index at which the given block of Size or greater appears. */

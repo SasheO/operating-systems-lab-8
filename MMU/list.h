@@ -81,5 +81,8 @@ block_t* list_get_from_front(list_t *l);
 /* compare if two blocks are equal */
 bool compareBlks(block_t* a, block_t *b);
 
+/* get block size */
+int blk_get_size(block_t *thisblk);
+
 /* join adjacent nodes who blocks are physically next to each other */
 void list_coalese_nodes(list_t *l);
