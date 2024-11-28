@@ -71,23 +71,27 @@ void allocate_memory(list_t * freelist, list_t * alloclist, int pid, int blocksi
         printf("Error: Memory allocation %d blocks\n", blocksize);
     }
     else{
+      // get first large enough block (list is ordered randomly in case of First fit, ascending in case of best fit, or descending in case of worst fit)
       indx = list_get_index_of_by_Size(freelist, blocksize);
-      block_to_assign = list_remove_at_index(freelist, indx); // get first large enough block
-      internal_fragment_block = trimBlk(block_to_assign, blocksize); // trim the block to only what is needed and create internal_fragment_block of the extra space
+      block_to_assign = list_remove_at_index(freelist, indx); 
+      //
+      internal_fragment_block = trimBlk(block_to_assign, blocksize); // trim the block to only what is needed and create internal_fragment_block of the extra space. internal_fragment_block will be null if there is no extra space
       block_to_assign->pid = pid; // allocate the right PID to memory to assign
       list_add_ascending_by_address(alloclist, block_to_assign); // assign block to memory
+      
+      // here is where we treat first, best, and worst fit differentlly (in case of ordering free list)
       if (internal_fragment_block!=NULL){
         if(policy == 1){
           // 1 -> FIFO
-          list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the free list        
+          list_add_to_back(freelist, internal_fragment_block); // put free memory from internal fragment on the end free list        
         }
         else if (policy == 2){
           // 2 -> BESTFIT
-            list_add_ascending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
+            list_add_ascending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list in ascending order
         }
         else if (policy == 3){
           //  3 -> WORSTFIT
-          list_add_descending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list 
+          list_add_descending_by_blocksize(freelist, internal_fragment_block); // put free memory from internal fragment on the free list in descending order
         }
       }
     }
@@ -111,22 +115,24 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
     */
     int indx_to_remove;
     block_t* block_to_deallocate;
-    if(policy == 1){
+    indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
+    while(indx_to_remove!=-1){
+      block_to_deallocate = list_remove_at_index(alloclist, indx_to_remove); // get block allocated to pid memory
+      if(policy == 1){
         // 1 -> FIFO
-        indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
-        while(indx_to_remove!=-1){
-          block_to_deallocate = list_remove_at_index(alloclist, indx_to_remove); // get block allocated to pid memory
+        // block_to_deallocate->pid = NULL;
+        list_add_to_back(freelist, block_to_deallocate); // put free memory from deallocated block
+      }
+      else if (policy == 2){
+          // 2 -> BESTFIT
+          list_add_ascending_by_blocksize(freelist, block_to_deallocate); // put free memory from deallocated block on the free list in ascending order
           
-          // block_to_deallocate->pid = NULL;
-          list_add_to_back(freelist, block_to_deallocate); // put free memory from deallocated block
-          indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
         }
-    }
-    else if (policy == 2){
-        // 2 -> BESTFIT 
-    }
-    else if (policy == 3){
-        //  3 -> WORSTFIT
+        else if (policy == 3){
+          //  3 -> WORSTFIT
+          list_add_descending_by_blocksize(freelist, block_to_deallocate); // put free memory from deallocated block on the free list in descending order
+        }
+      indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
     }
 }
 

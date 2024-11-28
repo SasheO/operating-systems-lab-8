@@ -143,7 +143,7 @@ int blk_get_size(block_t *thisblk){
   return thisblk->end - thisblk->start + 1;
 }
 
-void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
+void list_add_ascending_by_blocksize(list_t *l, block_t *blk){
    /*
    * 1. Insert newblk into list l in ascending order based on the blocksize.
    *    blocksize is calculated :  blocksize = end - start +1
@@ -159,22 +159,49 @@ void list_add_ascending_by_blocksize(list_t *l, block_t *newblk){
    *    USE the compareSize()
    */
 
-   // TODO: implement
-   node_t *newNode = node_alloc(newblk);
-  node_t *current = l->head;
-  node_t *previous;
-
-  if (current==NULL){
+   node_t *current;
+  node_t *prev;
+  node_t *newNode = node_alloc(blk);
+  int newblk_size = blk->end - blk->start;
+  int curblk_size;
+  
+  if(l->head == NULL){
     l->head = newNode;
   }
   else{
-    int newblk_size = blk_get_size(newblk);
-    while((current!=NULL) && (blk_get_size(current->blk) < newblk_size)){
-      previous =  current;
-      current = current->next;
+    prev = current = l->head;
+    
+    curblk_size = current->blk->end - current->blk->start + 1;
+    
+    if(current->next == NULL) {  //only one node in list
+       if(newblk_size < curblk_size) {  // place in front of current node
+          newNode->next = l->head;
+          l->head = newNode;
+       }
+       else {   // place behind current node
+          current->next = newNode;
+          newNode->next = NULL;
+       }
     }
-    previous->next = newNode;
-    newNode->next = current;
+    else {  // two or more nodes in list
+      
+       if(newblk_size < curblk_size) {  // place in front of current node
+          newNode->next = l->head;
+          l->head = newNode;
+       }
+       else {
+      
+          while(current != NULL && newblk_size > curblk_size) {
+               prev = current;
+               current = current->next;
+               
+               if(current != NULL)  // the last one in the list
+                     curblk_size = current->blk->end - current->blk->start;
+          }
+          prev->next = newNode;
+          newNode->next = current;
+       }
+    }
   }
 }
 
