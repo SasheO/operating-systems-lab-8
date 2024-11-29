@@ -128,6 +128,7 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
           list_add_ascending_by_blocksize(freelist, block_to_deallocate); // put free memory from deallocated block on the free list in ascending order
         }
         else if (policy == 3){
+          
           //  3 -> WORSTFIT
           list_add_descending_by_blocksize(freelist, block_to_deallocate); // put free memory from deallocated block on the free list in descending order
         }
@@ -135,7 +136,7 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
     }
 }
 
-list_t* coalese_memory(list_t * list){
+list_t* coalese_memory(list_t * list, int policy){
   list_t *temp_list = list_alloc();
   block_t *blk;
   
@@ -146,7 +147,8 @@ list_t* coalese_memory(list_t * list){
   // try to combine physically adjacent blocks
   
   list_coalese_nodes(temp_list);
-        
+  
+  // TODO: sort according to policy i.e. ascending for best fit and descending for worst fit
   return temp_list;
 }
 
@@ -208,7 +210,7 @@ int main(int argc, char *argv[])
        }
        else {
              printf("COALESCE/COMPACT\n");
-             FREE_LIST = coalese_memory(FREE_LIST);
+             FREE_LIST = coalese_memory(FREE_LIST, Memory_Mgt_Policy);
        }   
      
        printf("************************\n");

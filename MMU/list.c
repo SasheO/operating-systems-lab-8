@@ -268,6 +268,7 @@ void list_coalese_nodes(list_t *l){
    * 
    * USE the compareSize()
    */
+
 }
 
 block_t* list_remove_from_back(list_t *l){
