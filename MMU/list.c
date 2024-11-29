@@ -289,7 +289,7 @@ void list_coalese_nodes(list_t *l){
    while ((curr != NULL)){
     
     next_node = curr->next;
-    while (next_node != NULL){
+    while (next_node != NULL){ // need to do this in case there are more than two successive blocks that need to be coalesced
       if (curr->blk->end + 1 == next_node->blk->start){
         curr->blk->end = next_node->blk->end;
         curr->next = next_node->next;

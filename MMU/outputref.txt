@@ -1,0 +1,196 @@
+PARTITION_SIZE = 100000
+************************
+ALLOCATE: 50 FROM PID: 2
+************************
+Free Memory:
+Block 0:	 START: 50	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+
+
+************************
+ALLOCATE: 1000 FROM PID: 3
+************************
+Free Memory:
+Block 0:	 START: 1050	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+
+
+************************
+ALLOCATE: 10000 FROM PID: 5
+************************
+Free Memory:
+Block 0:	 START: 11050	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 1050	 END: 11049	 PID: 5
+
+
+************************
+ALLOCATE: 8900 FROM PID: 4
+************************
+Free Memory:
+Block 0:	 START: 19950	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 1050	 END: 11049	 PID: 5
+Block 3:	 START: 11050	 END: 19949	 PID: 4
+
+
+************************
+ALLOCATE: 20000 FROM PID: 6
+************************
+Free Memory:
+Block 0:	 START: 39950	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 1050	 END: 11049	 PID: 5
+Block 3:	 START: 11050	 END: 19949	 PID: 4
+Block 4:	 START: 19950	 END: 39949	 PID: 6
+
+
+************************
+COALESCE/COMPACT
+************************
+Free Memory:
+Block 0:	 START: 39950	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 1050	 END: 11049	 PID: 5
+Block 3:	 START: 11050	 END: 19949	 PID: 4
+Block 4:	 START: 19950	 END: 39949	 PID: 6
+
+
+************************
+DEALLOCATE MEM: PID 5
+************************
+Free Memory:
+Block 0:	 START: 39950	 END: 99999
+Block 1:	 START: 1050	 END: 11049
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 11050	 END: 19949	 PID: 4
+Block 3:	 START: 19950	 END: 39949	 PID: 6
+
+
+************************
+ALLOCATE: 500000 FROM PID: 7
+Error: Memory Allocation 500000 blocks
+************************
+Free Memory:
+Block 0:	 START: 39950	 END: 99999
+Block 1:	 START: 1050	 END: 11049
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 11050	 END: 19949	 PID: 4
+Block 3:	 START: 19950	 END: 39949	 PID: 6
+
+
+************************
+ALLOCATE: 1234 FROM PID: 8
+************************
+Free Memory:
+Block 0:	 START: 1050	 END: 11049
+Block 1:	 START: 41184	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 50	 END: 1049	 PID: 3
+Block 2:	 START: 11050	 END: 19949	 PID: 4
+Block 3:	 START: 19950	 END: 39949	 PID: 6
+Block 4:	 START: 39950	 END: 41183	 PID: 8
+
+
+************************
+DEALLOCATE MEM: PID 3
+************************
+Free Memory:
+Block 0:	 START: 1050	 END: 11049
+Block 1:	 START: 41184	 END: 99999
+Block 2:	 START: 50	 END: 1049
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 11050	 END: 19949	 PID: 4
+Block 2:	 START: 19950	 END: 39949	 PID: 6
+Block 3:	 START: 39950	 END: 41183	 PID: 8
+
+
+************************
+ALLOCATE: 4000 FROM PID: 9
+************************
+Free Memory:
+Block 0:	 START: 41184	 END: 99999
+Block 1:	 START: 50	 END: 1049
+Block 2:	 START: 5050	 END: 11049
+
+Allocated Memory:
+Block 0:	 START: 0	 END: 49	 PID: 2
+Block 1:	 START: 1050	 END: 5049	 PID: 9
+Block 2:	 START: 11050	 END: 19949	 PID: 4
+Block 3:	 START: 19950	 END: 39949	 PID: 6
+Block 4:	 START: 39950	 END: 41183	 PID: 8
+
+
+************************
+DEALLOCATE MEM: PID 2
+************************
+Free Memory:
+Block 0:	 START: 41184	 END: 99999
+Block 1:	 START: 50	 END: 1049
+Block 2:	 START: 5050	 END: 11049
+Block 3:	 START: 0	 END: 49
+
+Allocated Memory:
+Block 0:	 START: 1050	 END: 5049	 PID: 9
+Block 1:	 START: 11050	 END: 19949	 PID: 4
+Block 2:	 START: 19950	 END: 39949	 PID: 6
+Block 3:	 START: 39950	 END: 41183	 PID: 8
+
+
+************************
+DEALLOCATE MEM: PID 8
+************************
+Free Memory:
+Block 0:	 START: 41184	 END: 99999
+Block 1:	 START: 50	 END: 1049
+Block 2:	 START: 5050	 END: 11049
+Block 3:	 START: 0	 END: 49
+Block 4:	 START: 39950	 END: 41183
+
+Allocated Memory:
+Block 0:	 START: 1050	 END: 5049	 PID: 9
+Block 1:	 START: 11050	 END: 19949	 PID: 4
+Block 2:	 START: 19950	 END: 39949	 PID: 6
+
+
+************************
+COALESCE/COMPACT
+************************
+Free Memory:
+Block 0:	 START: 0	 END: 1049
+Block 1:	 START: 5050	 END: 11049
+Block 2:	 START: 39950	 END: 99999
+
+Allocated Memory:
+Block 0:	 START: 1050	 END: 5049	 PID: 9
+Block 1:	 START: 11050	 END: 19949	 PID: 4
+Block 2:	 START: 19950	 END: 39949	 PID: 6
+
+
