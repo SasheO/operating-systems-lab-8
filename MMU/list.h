@@ -87,5 +87,5 @@ bool compareBlks(block_t* a, block_t *b);
 /* get block size */
 int blk_get_size(block_t *thisblk);
 
-/* join adjacent nodes who blocks are physically next to each other */
+/* join adjacent nodes who blocks are physically next to each other. modifies list order */
 void list_coalese_nodes(list_t *l);

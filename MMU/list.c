@@ -99,7 +99,7 @@ void list_add_at_index(list_t *l, block_t *blk, int index){
   }
 }
 
-void list_add_ascending_by_address(list_t *l, block_t *newblk){
+void list_add_ascending_by_address(list_t *l, block_t *blk){
   
    /*
    * 1. Insert newblk into list l in ascending order based on the START address of the block.
@@ -107,36 +107,50 @@ void list_add_ascending_by_address(list_t *l, block_t *newblk){
    *    node_t *c = l.head;
    *    Insert newblk After Current Node if:   newblk->start > c->start
    */
-  node_t *newNode = node_alloc(newblk);
-  node_t *current = l->head;
-  node_t *previous;
-
-  if (current==NULL){
+  node_t *current;
+  node_t *prev;
+  node_t *newNode = node_alloc(blk);
+  int newblk_start = blk->start;
+  int curblk_start;
+  
+  if(l->head == NULL){
     l->head = newNode;
-
   }
   else{
-    int i = 0;
-    while(current!=NULL){
-      
-      if (current->blk->start < newblk->start){
-
-        i++;
-        previous =  current;
-        current = current->next;
-      }
-      else{
-
-        previous =  current;
-        current = current->next;
-        
-        break;
-      }
+    prev = current = l->head;
+    
+    curblk_start = current->blk->start;
+    
+    if(current->next == NULL) {  //only one node in list
+       if(newblk_start < curblk_start) {  // place in front of current node
+          newNode->next = l->head;
+          l->head = newNode;
+       }
+       else {   // place behind current node
+          current->next = newNode;
+          newNode->next = NULL;
+       }
     }
-    previous->next = newNode;
-    newNode->next = current;
+    else {  // two or more nodes in list
+      
+       if(newblk_start < curblk_start) {  // place in front of current node
+          newNode->next = l->head;
+          l->head = newNode;
+       }
+       else {
+      
+          while(current != NULL && newblk_start > curblk_start) {
+               prev = current;
+               current = current->next;
+               
+               if(current != NULL)  // the last one in the list
+                     curblk_start = current->blk->end - current->blk->start;
+          }
+          prev->next = newNode;
+          newNode->next = current;
+       }
+    }
   }
-
 }
 
 int blk_get_size(block_t *thisblk){
@@ -268,6 +282,27 @@ void list_coalese_nodes(list_t *l){
    * 
    * USE the compareSize()
    */
+
+   
+   node_t * curr = l->head;
+   node_t * next_node;
+   while ((curr != NULL)){
+    
+    next_node = curr->next;
+    while (next_node != NULL){
+      if (curr->blk->end + 1 == next_node->blk->start){
+        curr->blk->end = next_node->blk->end;
+        curr->next = next_node->next;
+        free(next_node);
+      }
+      else{
+        break;
+      }
+      next_node = curr->next;
+    }
+    
+    curr = curr->next;
+   }
 
 }
 
