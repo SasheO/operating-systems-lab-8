@@ -403,6 +403,7 @@ block_t * trimBlk(block_t *given_block, int size_needed){
     internal_fragment->end = given_block->end;
     given_block->end = given_block->start + size_needed -1;
     internal_fragment->start = given_block->end+1;
+    internal_fragment->pid = 0;
     return internal_fragment;
   }
   

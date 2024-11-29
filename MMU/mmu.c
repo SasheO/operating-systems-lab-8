@@ -68,7 +68,7 @@ void allocate_memory(list_t * freelist, list_t * alloclist, int pid, int blocksi
     block_t* internal_fragment_block;
     indx = list_get_index_of_by_Size(freelist, blocksize);
     if (indx==-1){ // not enough space
-        printf("Error: Memory allocation %d blocks\n", blocksize);
+        printf("Error: Memory Allocation %d blocks\n", blocksize);
     }
     else{
       // get first large enough block (list is ordered randomly in case of First fit, ascending in case of best fit, or descending in case of worst fit)
@@ -118,6 +118,7 @@ void deallocate_memory(list_t * alloclist, list_t * freelist, int pid, int polic
     indx_to_remove = list_get_index_of_by_Pid(alloclist, pid);
     while(indx_to_remove!=-1){
       block_to_deallocate = list_remove_at_index(alloclist, indx_to_remove); // get block allocated to pid memory
+      block_to_deallocate->pid = 0;
       if(policy == 1){
         // 1 -> FIFO
         // block_to_deallocate->pid = NULL;
