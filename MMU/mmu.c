@@ -147,9 +147,27 @@ list_t* coalese_memory(list_t * list, int policy){
   // try to combine physically adjacent blocks
   
   list_coalese_nodes(temp_list);
-  
   // TODO: sort according to policy i.e. ascending for best fit and descending for worst fit
-  return temp_list;
+  // TODO: free unused list
+
+  while((blk = list_remove_from_front(temp_list)) != NULL) {  // sort the list in ascending order by address
+        if(policy == 1){
+          // 1 -> FIFO
+          list_add_to_back(list, blk); // rearrange randomly
+        }
+        else if (policy == 2){
+          // 2 -> BESTFIT
+            list_add_ascending_by_blocksize(list, blk); // rearrange in order of size ascending
+        }
+        else if (policy == 3){
+          //  3 -> WORSTFIT
+          list_add_descending_by_blocksize(list, blk); // put free memory from internal fragment on the free list in descending order
+        }
+  }
+  
+  list_free(temp_list);
+  temp_list = NULL;
+  return list;
 }
 
 void print_list(list_t * list, char * message){
